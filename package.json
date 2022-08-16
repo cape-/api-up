@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "name": "api-rendr",
+  "version": "1.0.0",
+  "description": "APIs implementation on the fly. Provides hooks for validations, transformations, and triggering other actions",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cape-/api-rendr.git"
+  },
+  "keywords": [
+    "api",
+    "express"
+  ],
+  "author": "Lautaro Capella <laucape@gmail.com>",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/cape-/api-rendr/issues"
+  },
+  "homepage": "https://github.com/cape-/api-rendr#readme"
+}
