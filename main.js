@@ -33,9 +33,11 @@ module.exports = {
             // app.listen(PORT, () => console.log(`Running on port ${PORT}`));
         }
         _parseAPIEndpointKey(sEndpointKey) {
-            const aStringParts = sEndpointKey.split(/\s+/).filter(sStr => sStr);
+            // const aStringParts = sEndpointKey.split(/\s+/).filter(sStr => sStr);
+            const aStringParts = sEndpointKey.match(/([A-Z-]+)\s+(\/\S*)/);
+            if(!aStringParts) throw Error(`Unable to interpret "${sEndpointKey}" as a valid routing instruction`);
             const method = aStringParts[0].toLowerCase();
-            if (!this._validateHttpMethod(method)) throw Error(`Invalid HTTP method ${method}`)
+            if (!this._validateHttpMethod(method)) throw Error(`Invalid HTTP method ${method}`);
             const route = aStringParts[1];
             return { method, route };
         }
