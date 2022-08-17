@@ -35,9 +35,9 @@ module.exports = {
             // const aStringParts = sEndpointKey.split(/\s+/).filter(sStr => sStr);
             const aStringParts = sEndpointKey.match(/([A-Z-]+)\s+(\/\S*)/);
             if(!aStringParts) throw Error(`Unable to interpret "${sEndpointKey}" as a valid routing instruction`);
-            const method = aStringParts[0].toLowerCase();
+            const method = aStringParts[1].toLowerCase();
             if (!this._validateHttpMethod(method)) throw Error(`Invalid HTTP method ${method}`);
-            const route = aStringParts[1];
+            const route = aStringParts[2];
             return { method, route };
         }
         _validateHttpMethod(sMethod) {
