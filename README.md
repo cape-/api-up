@@ -10,15 +10,15 @@ const app = require("express")();
 
 const r = new Render();
 const oAPIEndpoints = {
-    "ALL  /": (req, res) => res.send("Try endpoint /orders"),
-    "POST /orders": (req, res) => res.send("/orders POST handler"),
-    "GET  /orders": (req, res) => res.send("/orders GET handler"),
-    "GET  /orders/:orderId": (req, res) => res.send(`GET order ${req.params.orderId}`),
-    "GET  /orders/:orderId/items": (req, res) => res.send(`GET items of order ${req.params.orderId}`)
+    "ALL  /                   ": (req, res) => res.send("Try endpoint /orders"),
+    "POST /orders             ": (req, res) => res.send("/orders POST handler"),
+    "GET  /orders             ": (req, res) => res.send("/orders GET handler"),
+    "GET  /orders/:ordId      ": (req, res) => res.send(`GET order ${req.params.ordId}`),
+    "GET  /orders/:ordId/items": (req, res) => res.send(`GET items of order ${req.params.ordId}`)
 }
 
 app.use(r.render(oAPIEndpoints));
-app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders`));
+app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/1234/items`));
 ```
 
 # `Render` class
