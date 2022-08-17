@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with API-rendr.  If not, see <http://www.gnu.org/licenses/>.
 const express = require("express");
-const debug = require("debug")("Render");
+const debug = require("debug")("api-rendr:Render");
 
 module.exports = {
     Render: class APIRenderRender {
