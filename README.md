@@ -2,7 +2,7 @@
 
 API implementation on the fly. Provides hooks for validations, transformations, and triggering other actions.
 
-This module uses (express)[https://expressjs.com].
+This module uses [express](https://expressjs.com).
 
 # Intuitive and simple
 
