@@ -30,7 +30,6 @@ module.exports = {
                 this._router[oEndpoint.method].call(this._router, oEndpoint.route, oAPIEndpoints[sEndpointKey]);
             }
             return this._router;
-            // app.listen(PORT, () => console.log(`Running on port ${PORT}`));
         }
         _parseAPIEndpointKey(sEndpointKey) {
             // const aStringParts = sEndpointKey.split(/\s+/).filter(sStr => sStr);
