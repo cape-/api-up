@@ -18,8 +18,7 @@
 const { Render } = require("../main");
 const app = require("express")();
 
-const r = new Render();
-const oAPIEndpoints = {
+app.use(new Render().render({
     "ALL /": (req, res) => res.send("Try endpoint /orders"),
     "/orders": {
         POST: (req, res) => res.send("/orders POST handler"),
@@ -35,7 +34,6 @@ const oAPIEndpoints = {
         }
     },
     "ALL /help": "This is the help to show..."
-}
+}));
 
-app.use(r.render(oAPIEndpoints));
 app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/1234/items/detail`));
