@@ -28,7 +28,7 @@ module.exports = {
                 const oEndpointValue = oAPIEndpoints[sEndpointKey];
                 if (typeof oEndpointValue === "function") {
                     const oEndpoint = this._parseAPIEndpointKey(sEndpointKey, sPath);
-                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString()}`);
+                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString().substring(0,40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, oEndpointValue);
                 } else if (typeof oEndpointValue === "object") {
                     let _sPath = sPath ? sPath.trim() + sEndpointKey.trim() : sEndpointKey.trim();
@@ -36,7 +36,7 @@ module.exports = {
                     this.render(oEndpointValue, _sPath);
                 } else if (typeof oEndpointValue === "string") {
                     const oEndpoint = this._parseAPIEndpointKey(sEndpointKey, sPath);
-                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FIXED STRING ${oEndpointValue}`);
+                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FIXED STRING ${oEndpointValue.substring(0,40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, (req, res) => res.send(oEndpointValue));
                 } else throw Error("Unexpected value for key in endpoint settings")
             }
