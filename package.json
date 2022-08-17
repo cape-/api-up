@@ -8,7 +8,8 @@
   "description": "APIs implementation on the fly. Provides hooks for validations, transformations, and triggering other actions",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "Example": "@powershell -Command $env:DEBUG='';node .\\examples\\simpleExample.js ",
+    "ExampleWindowsDebug": "@powershell -Command $env:DEBUG='*';node .\\examples\\simpleExample.js"
   },
   "repository": {
     "type": "git",
