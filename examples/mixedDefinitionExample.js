@@ -22,15 +22,20 @@ const r = new Render();
 const oAPIEndpoints = {
     "ALL /": (req, res) => res.send("Try endpoint /orders"),
     "/orders": {
-        "POST": (req, res) => res.send("/orders POST handler"),
-        "GET": (req, res) => res.send("/orders GET handler"),
+        POST: (req, res) => res.send("/orders POST handler"),
+        GET: (req, res) => res.send("/orders GET handler"),
         "/:ordId": {
-            "GET": (req, res) => res.send(`GET order ${req.params.ordId}`),
-            "/items": { "GET": (req, res) => res.send(`GET items of order ${req.params.ordId}`) }
+            GET: (req, res) => res.send(`GET order ${req.params.ordId}`),
+            "/items": {
+                GET: (req, res) => res.send(`GET items of order ${req.params.ordId}`),
+                "/detail": {
+                    GET: "Not implemented yet!"
+                }
+            }
         }
     },
     "ALL /help": "This is the help to show..."
 }
 
 app.use(r.render(oAPIEndpoints));
-app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/1234/items`));
+app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/1234/items/detail`));
