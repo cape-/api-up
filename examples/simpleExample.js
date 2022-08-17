@@ -18,20 +18,14 @@
 const { Render } = require("../main");
 const app = require("express")();
 
-const PORT = process.env.PORT || 3000;
-
 const r = new Render();
 const oAPIEndpoints = {
-    "ALL  /": (req, res) => res.send("Try navigating to <code>/orders.</code>"),
-    "POST /orders": (req, res) => res.send("This is the /orders POST handler responding."),
-    "GET  /orders": (req, res) => res.send("This is the /orders GET handler responding."),
-    "GET  /orders/:orderId": (req, res) => res.send("This is the /orders/:orderId GET handler responding."),
-    "GET  /orders/:orderId/items": (req, res) => res.send("This is the /orders/:orderId/items GET handler responding."),
-    "POST /orderItems": (req, res) => res.send("This is the /orderItems POST handler responding."),
-    "GET  /orderItems": (req, res) => res.send("This is the /orderItems GET handler responding."),
-    "GET  /orderItems/:orderId}": (req, res) => res.send("This is the /orderItems/:orderId GET handler responding."),
-    "GET  /orderItems/:orderId/:orderItem": (req, res) => res.send("This is the /orderItems/:orderId/:orderItem GET handler responding."),
+    "ALL  /                   ": (req, res) => res.send("Try endpoint /orders"),
+    "POST /orders             ": (req, res) => res.send("/orders POST handler"),
+    "GET  /orders             ": (req, res) => res.send("/orders GET handler"),
+    "GET  /orders/:ordId      ": (req, res) => res.send(`GET order ${req.params.ordId}`),
+    "GET  /orders/:ordId/items": (req, res) => res.send(`GET items of order ${req.params.ordId}`)
 }
 
 app.use(r.render(oAPIEndpoints));
-app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/1234/items`));
