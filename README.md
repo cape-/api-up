@@ -19,12 +19,11 @@ const oAPIEndpoints = {
 
 app.use(r.render(oAPIEndpoints));
 app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders`));
-
 ```
 
 # Methods
 
-## `.render()`
+### `.render()`
 
 Receives an API Endpoints descriptor object. Returns an [express.Router()](https://expressjs.com/es/4x/api.html#router) to be used by express app.
 
