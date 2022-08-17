@@ -37,7 +37,7 @@ Receives an `APIEndpointsSettings` descriptor object. Returns an [express.Router
 
 ## The `APIEndpointsSettings` object.
 
-Each key of this object, must consist of a string containing the HTTP Method followed by the route. The corresponding value should be the handler (`(req,res,next) => {}`) function for that request.
+Each key of this object, must consist of a string containing the HTTP Method followed by [a path](https://expressjs.com/es/4x/api.html#path-examples). The corresponding value should be the handler (`(req,res,next) => {}`) function for that request.
 
 ### HTTP methods [allowed by express](https://expressjs.com/es/4x/api.html#routing-methods):
 
@@ -65,9 +65,9 @@ Each key of this object, must consist of a string containing the HTTP Method fol
  + unlock
  + unsubscribe
 
- Also allowed express [`all`](https://expressjs.com/es/4x/api.html#router.all) method as valid method.
+ Also allowed express [`all method`](https://expressjs.com/es/4x/api.html#router.all) as valid method.
 
- Method parsing is **case-insensitive** and doesn't care of **multiple blanks**, so you can use "regular" uppercase style for HTTP methods descriptors.
+ Method parsing is **case-insensitive** and doesn't care of **multiple blanks**, so you can use "regular" uppercase style for HTTP methods descriptors and align paths as you like.
  
  ```javascript
     "GET    /users      ": () => {},
