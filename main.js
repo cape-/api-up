@@ -28,7 +28,7 @@ module.exports = {
                 const oEndpointValue = oAPIEndpoints[sEndpointExpression];
                 if (typeof oEndpointValue === "function") {
                     // handler fn
-                    const oEndpoint = this._parseAPIEndpointKey(sEndpointExpression, sMountPath);
+                    const oEndpoint = this._parseEndpointExpression(sEndpointExpression, sMountPath);
                     debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString().substring(0, 40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, oEndpointValue);
                 } else if (typeof oEndpointValue === "object") {
@@ -36,14 +36,14 @@ module.exports = {
                     debug(`ROUTE ${_sPath} (RECURSIVE)`);
                     this.render(oEndpointValue, _sPath);
                 } else if (typeof oEndpointValue === "string") {
-                    const oEndpoint = this._parseAPIEndpointKey(sEndpointExpression, sMountPath);
+                    const oEndpoint = this._parseEndpointExpression(sEndpointExpression, sMountPath);
                     debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FIXED STRING ${oEndpointValue.substring(0, 40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, (req, res) => res.send(oEndpointValue));
                 } else throw Error("Unexpected value for key in endpoint settings")
             }
             return this._router;
         }
-        _parseAPIEndpointKey(sEndpointExpression, sMountPath) {
+        _parseEndpointExpression(sEndpointExpression, sMountPath) {
             // const aStringParts = sEndpointExpression.split(/\s+/).filter(sStr => sStr);
             let aStringParts;
             let method;
