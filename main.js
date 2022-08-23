@@ -23,38 +23,39 @@ module.exports = {
             this._router = new express.Router(oConfig);
             return this;
         }
-        render(oAPIEndpoints, sPath) {
-            for (let sEndpointKey in oAPIEndpoints) {
-                const oEndpointValue = oAPIEndpoints[sEndpointKey];
+        render(oAPIEndpoints, sMountPath) {
+            for (let sEndpointExpression in oAPIEndpoints) {
+                const oEndpointValue = oAPIEndpoints[sEndpointExpression];
                 if (typeof oEndpointValue === "function") {
-                    const oEndpoint = this._parseAPIEndpointKey(sEndpointKey, sPath);
-                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString().substring(0,40)}`);
+                    // handler fn
+                    const oEndpoint = this._parseAPIEndpointKey(sEndpointExpression, sMountPath);
+                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString().substring(0, 40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, oEndpointValue);
                 } else if (typeof oEndpointValue === "object") {
-                    let _sPath = sPath ? sPath.trim() + sEndpointKey.trim() : sEndpointKey.trim();
+                    let _sPath = sMountPath ? sMountPath.trim() + sEndpointExpression.trim() : sEndpointExpression.trim();
                     debug(`ROUTE ${_sPath} (RECURSIVE)`);
                     this.render(oEndpointValue, _sPath);
                 } else if (typeof oEndpointValue === "string") {
-                    const oEndpoint = this._parseAPIEndpointKey(sEndpointKey, sPath);
-                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FIXED STRING ${oEndpointValue.substring(0,40)}`);
+                    const oEndpoint = this._parseAPIEndpointKey(sEndpointExpression, sMountPath);
+                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FIXED STRING ${oEndpointValue.substring(0, 40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, (req, res) => res.send(oEndpointValue));
                 } else throw Error("Unexpected value for key in endpoint settings")
             }
             return this._router;
         }
-        _parseAPIEndpointKey(sEndpointKey, sPath) {
-            // const aStringParts = sEndpointKey.split(/\s+/).filter(sStr => sStr);
+        _parseAPIEndpointKey(sEndpointExpression, sMountPath) {
+            // const aStringParts = sEndpointExpression.split(/\s+/).filter(sStr => sStr);
             let aStringParts;
             let method;
             let route;
-            if (!sPath) {
-                aStringParts = sEndpointKey.match(/([A-Z-]+)\s+(\/\S*)/i);
-                if (!aStringParts) throw Error(`Unable to interpret "${sEndpointKey}" as a valid routing instruction`);
+            if (!sMountPath) {
+                aStringParts = sEndpointExpression.match(/([A-Z-]+)\s+(\/\S*)/i);
+                if (!aStringParts) throw Error(`Unable to interpret "${sEndpointExpression}" as a valid routing instruction`);
                 route = aStringParts[2];
             } else {
-                aStringParts = sEndpointKey.match(/([A-Z-]+)/i);
-                if (!aStringParts) throw Error(`Unable to interpret "${sEndpointKey}" as a valid HTTP method`);
-                route = sPath;
+                aStringParts = sEndpointExpression.match(/([A-Z-]+)/i);
+                if (!aStringParts) throw Error(`Unable to interpret "${sEndpointExpression}" as a valid HTTP method`);
+                route = sMountPath;
             }
             method = aStringParts[1].toLowerCase();
             if (!this._validateHttpMethod(method)) throw Error(`Invalid HTTP method ${method}`);
