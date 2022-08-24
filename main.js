@@ -26,19 +26,23 @@ module.exports = {
         render(oAPIEndpoints, sMountPath) {
             for (let sEndpointExpression in oAPIEndpoints) {
                 const oEndpointValue = oAPIEndpoints[sEndpointExpression];
+                const oEndpoint = this._parseEndpointExpression(sEndpointExpression, sMountPath);
+
                 if (typeof oEndpointValue === "function") {
                     // handler fn
-                    const oEndpoint = this._parseEndpointExpression(sEndpointExpression, sMountPath);
                     debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString().substring(0, 40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, oEndpointValue);
+
                 } else if (typeof oEndpointValue === "object") {
-                    let _sPath = sMountPath ? sMountPath.trim() + sEndpointExpression.trim() : sEndpointExpression.trim();
-                    debug(`ROUTE ${_sPath} (RECURSIVE)`);
-                    this.render(oEndpointValue, _sPath);
+                    // sub-route (recursive)
+                    debug(`ROUTE ${oEndpoint.route} (RECURSIVE)`);
+                    this.render(oEndpointValue, oEndpoint.route);
+
                 } else if (typeof oEndpointValue === "string") {
-                    const oEndpoint = this._parseEndpointExpression(sEndpointExpression, sMountPath);
+                    // fixed string
                     debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FIXED STRING ${oEndpointValue.substring(0, 40)}`);
                     this._router[oEndpoint.method].call(this._router, oEndpoint.route, (req, res) => res.send(oEndpointValue));
+
                 } else throw Error("Unexpected value for key in endpoint settings")
             }
             return this._router;
