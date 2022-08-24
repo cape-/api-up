@@ -44,29 +44,41 @@ module.exports = {
             return this._router;
         }
         _parseEndpointExpression(sEndpointExpression, sMountPath) {
-            // const aStringParts = sEndpointExpression.split(/\s+/).filter(sStr => sStr);
+            const rMethodAndRoute = /\b(all|checkout|copy|delete|get|head|lock|merge|mkactivity|mkcol|move|m-search|notify|options|patch|post|purge|put|report|search|subscribe|trace|unlock|unsubscribe)\s+(\/\S*)/i;
+            const rMethod = /\b(all|checkout|copy|delete|get|head|lock|merge|mkactivity|mkcol|move|m-search|notify|options|patch|post|purge|put|report|search|subscribe|trace|unlock|unsubscribe)\b/i;
+            const rRoute = /\b(\/\S*)\b/;
+            const _sMountPath = (sMountPath || "").trim();
+
             let aStringParts;
             let method;
             let route;
-            if (!sMountPath) {
-                aStringParts = sEndpointExpression.match(/([A-Z-]+)\s+(\/\S*)/i);
-                if (!aStringParts) throw Error(`Unable to interpret "${sEndpointExpression}" as a valid routing instruction`);
-                route = aStringParts[2];
-            } else {
-                aStringParts = sEndpointExpression.match(/([A-Z-]+)/i);
-                if (!aStringParts) throw Error(`Unable to interpret "${sEndpointExpression}" as a valid HTTP method`);
-                route = sMountPath;
+
+            try {
+                // Try to parse as "METHOD /route"
+                aStringParts = sEndpointExpression.match(rMethodAndRoute);
+                if (aStringParts) {
+                    method = aStringParts[1].toLowerCase();
+                    route = _sMountPath + aStringParts[2];
+                } else {
+                    // Fallback to parse as "/route"
+                    aStringParts = sEndpointExpression.match(rRoute);
+                    if (aStringParts) {
+                        route = _sMountPath + aStringParts[1];
+                    } else {
+                        // Fallback to parse as "METHOD"
+                        aStringParts = sEndpointExpression.match(rMethod);
+                        if (aStringParts) {
+                            route = _sMountPath;
+                            method = aStringParts[1].toLowerCase();
+                        } else {
+                            throw Error(`Unable to interpret "${sEndpointExpression}" as a valid expression`);
+                        }
+                    }
+                }
+            } catch (error) {
+                throw Error(`Unable to interpret "${sEndpointExpression}" as a valid expression`);
             }
-            method = aStringParts[1].toLowerCase();
-            if (!this._validateHttpMethod(method)) throw Error(`Invalid HTTP method ${method}`);
             return { method, route };
-        }
-        _validateHttpMethod(sMethod) {
-            return [
-                "all", "checkout", "copy", "delete", "get", "head", "lock", "merge", "mkactivity",
-                "mkcol", "move", "m-search", "notify", "options", "patch", "post", "purge",
-                "put", "report", "search", "subscribe", "trace", "unlock", "unsubscribe"
-            ].includes(sMethod);
         }
     }
 }
