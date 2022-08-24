@@ -29,9 +29,16 @@ module.exports = {
                 const oEndpoint = this._parseEndpointExpression(sEndpointExpression, sMountPath);
 
                 if (typeof oEndpointValue === "function") {
-                    // handler fn
-                    debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString().substring(0, 40)}`);
-                    this._router[oEndpoint.method].call(this._router, oEndpoint.route, oEndpointValue);
+                    if (oEndpointValue.name === "serveStatic") {
+                        // express.static
+                        debug(`${sEndpointExpression} STATIC`);
+                        this._router.use.call(this._router, sEndpointExpression, oEndpointValue);
+
+                    } else {
+                        // handler fn
+                        debug(`${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oEndpointValue.toString().substring(0, 40)}`);
+                        this._router[oEndpoint.method].call(this._router, oEndpoint.route, oEndpointValue);
+                    }
 
                 } else if (typeof oEndpointValue === "object") {
                     // sub-route (recursive)
