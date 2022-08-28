@@ -33,7 +33,12 @@ app.use(new Render().render({
             GET: (req, res) => res.send(`GET order ${req.params.ordId}`),
             "GET /status": "DONE",
             "/items": {
-                GET: (req, res) => res.send(`GET items of order ${req.params.ordId}`),
+                // Define an Array of handler fns
+                GET: [
+                    (req, res, next) => { console.log(`GET items of order ${req.params.ordId} - first handler...`); next(); },
+                    (req, res, next) => { console.log(`GET items of order ${req.params.ordId} - second handler...`); next(); },
+                    (req, res, next) => { res.send(`GET items of order ${req.params.ordId} - third and last handler.`) },
+                ],
                 "/detail": {
                     // Serve a simple response with a fixed string
                     GET: "Not implemented yet!"
