@@ -16,24 +16,34 @@
 // along with API-rendr.  If not, see <http://www.gnu.org/licenses/>.
 
 const { Render } = require("../main");
-const app = require("express")();
+const express = require("express");
+const app = express();
 
 app.use(new Render().render({
-    "ALL /": (req, res) => res.send("Try endpoint /orders"),
+    // Define a handler fn for a "{METHOD} {/route}"
+    "GET /": (req, res) => res.send("Try endpoint /orders"),
+    // Define a object for {/route}
     "/orders": {
+        // Define a handler fn for a "{METHOD}"
         POST: (req, res) => res.send("/orders POST handler"),
         GET: (req, res) => res.send("/orders GET handler"),
+        // Define a object for {/route/subroute}
         "/:ordId": {
+            // Use mixed definitions
             GET: (req, res) => res.send(`GET order ${req.params.ordId}`),
+            "GET /status": "DONE",
             "/items": {
                 GET: (req, res) => res.send(`GET items of order ${req.params.ordId}`),
                 "/detail": {
+                    // Serve a simple response with a fixed string
                     GET: "Not implemented yet!"
                 }
             }
         }
     },
-    "ALL /help": "This is the help to show..."
+    "ALL /help     ": "This is the help to show...",
+    // Serve static resources
+    "/resources": express.static(__dirname + "/static"),
 }));
 
 app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/1234/items/detail`));
