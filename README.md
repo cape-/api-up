@@ -38,21 +38,35 @@ const { Render } = require("../main");
 const app = require("express")();
 
 app.use(new Render().render({
-    "ALL /": (req, res) => res.send("Try endpoint /orders"),
+    // Define a handler fn for a "{METHOD} {/route}"
+    "GET /": (req, res) => res.send("Try endpoint /orders"),
+    // Define a object for {/route}
     "/orders": {
+        // Define a handler fn for a "{METHOD}"
         POST: (req, res) => res.send("/orders POST handler"),
         GET: (req, res) => res.send("/orders GET handler"),
+        // Define a object for {/route/subroute}
         "/:ordId": {
+            // Use mixed definitions
             GET: (req, res) => res.send(`GET order ${req.params.ordId}`),
+            "GET /status": "DONE",
             "/items": {
-         GET: (req, res) => res.send(`GET items of order ${req.params.ordId}`), // 1.
-         "/detail": {                                                           // 2.
-             GET: "Not implemented yet!"                                        // 3.
+                // Define an Array of handler fns
+                GET: [
+                    (req, res, next) => { console.log(`GET items of order ${req.params.ordId} - first handler...`); next(); },
+                    (req, res, next) => { console.log(`GET items of order ${req.params.ordId} - second handler...`); next(); },
+                    (req, res, next) => { res.send(`GET items of order ${req.params.ordId} - third and last handler.`) },
+                ],
+                "/detail": {
+                    // Serve a simple response with a fixed string
+                    GET: "Not implemented yet!"
                 }
             }
         }
     },
-    "ALL /help": "This is the help to show..."
+    "ALL /help     ": "This is the help to show...",
+    // Serve static resources
+    "/resources": express.static(__dirname + "/static"),
 }));
 
 app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/1234/items/detail`));
