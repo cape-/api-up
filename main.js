@@ -40,6 +40,17 @@ module.exports = {
                         this._router[oEndpoint.method].call(this._router, oEndpoint.route, oEndpointValue);
                     }
 
+                } else if (Array.isArray(oEndpointValue)) {
+                    // Array of handlers [fn()]
+                    debug(`ROUTE ${oEndpoint.route} MULTI-HANDLERS (${oEndpointValue.length})`);
+                    oEndpointValue.forEach(oHandler => {
+                        if (typeof oHandler === "function") {
+                            // handler fn
+                            debug(`+ ${oEndpoint.method.toUpperCase()} ${oEndpoint.route} FN ${oHandler.toString().substring(0, 40)}`);
+                            this._router[oEndpoint.method].call(this._router, oEndpoint.route, oHandler);
+                        }
+                    });
+
                 } else if (typeof oEndpointValue === "object") {
                     // sub-route (recursive)
                     debug(`ROUTE ${oEndpoint.route} (RECURSIVE)`);
