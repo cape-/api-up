@@ -55,9 +55,9 @@ module.exports = {
             return this._router;
         }
         _parseEndpointExpression(sEndpointExpression, sMountPath) {
-            const rMethodAndRoute = /\b(all|checkout|copy|delete|get|head|lock|merge|mkactivity|mkcol|move|m-search|notify|options|patch|post|purge|put|report|search|subscribe|trace|unlock|unsubscribe)\s+(\/\S*)/i;
-            const rMethod = /\b(all|checkout|copy|delete|get|head|lock|merge|mkactivity|mkcol|move|m-search|notify|options|patch|post|purge|put|report|search|subscribe|trace|unlock|unsubscribe)\b/i;
-            const rRoute = /\b(\/\S*)\b/;
+            const rMethodAndRoute = /^\s*(all|checkout|copy|delete|get|head|lock|merge|mkactivity|mkcol|move|m-search|notify|options|patch|post|purge|put|report|search|subscribe|trace|unlock|unsubscribe)\s+(\/\S*)\s*$/i;
+            const rMethod = /^\s*(all|checkout|copy|delete|get|head|lock|merge|mkactivity|mkcol|move|m-search|notify|options|patch|post|purge|put|report|search|subscribe|trace|unlock|unsubscribe)\s*$/i;
+            const rRoute = /^\s*(\/\S*)\s*$/;
             const _sMountPath = (sMountPath || "").trim();
 
             let aStringParts;
