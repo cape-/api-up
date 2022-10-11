@@ -29,10 +29,6 @@ app.listen(3000, () => console.log(`Try opening http://localhost:3000/orders/123
 
 Use full-power complex or even mixed definitions.
 
-1. `function`: define a function to handle the request (default)
-1. `object`: use nested definitions for a specific route
-1. `string`: define a fixed string to be returned by the service
-
 ```javascript
 const { Render } = require("../main");
 const app = require("express")();
@@ -86,9 +82,11 @@ Receives an `APIEndpointsSettings` descriptor object. Returns an [express.Router
 
 ## The `APIEndpointsSettings` object.
 
-Each key of this object, must consist of a string containing the HTTP Method followed by [a path](https://expressjs.com/es/4x/api.html#path-examples). The corresponding value should be the handler (`(req,res,next) => {}`) function for that request.
+Each key of this object, must consist of a string containing the HTTP Method (see [Allowed HTTP methods](#allowed-http-methods)) followed by [a path](https://expressjs.com/es/4x/api.html#path-examples). The corresponding value for the key should be the handler for that request (see [Types of Handlers](#types-of-handlers)).
 
-### HTTP methods [allowed by express](https://expressjs.com/es/4x/api.html#routing-methods):
+### Allowed HTTP methods
+
+These are the [methods allowed by express](https://expressjs.com/es/4x/api.html#routing-methods):
 
  + checkout
  + copy
@@ -124,6 +122,52 @@ Each key of this object, must consist of a string containing the HTTP Method fol
     "DELETE /users      ": () => {},
     "ALL    /accessToken": () => {}
  ```
+
+### Types of Handlers
+
+There are **four types** of handlers that can be applied to a route.
+
+#### Handler function
+
+Standard express handler fn.
+
+```javascript
+// Handle request by function
+"GET /": (req, res) => { ... },
+```
+
+#### String
+
+A String as the response. The response will be a HTTP 200 OK Content-type=text/plain.
+
+```javascript
+// Serve a String
+"GET /version": "This is MyAPI v1.2.0",
+```
+
+#### Static content
+
+A [express.static()](https://expressjs.com/es/4x/api.html#express.static) to serve static resources for a specific route.
+
+**Note:** you should not declare the method for the route when using express.static().
+
+```javascript
+// Serve static resources
+"/resources": express.static(__dirname + "/static"),
+```
+
+#### Array of handler functions
+
+An array of [handler functions](#handler-function).
+
+```javascript
+// Serve static resources
+"GET /items": [
+    (req, res, next) => { console.log(`GET items - first handler...`); next(); },
+    (req, res, next) => { console.log(`GET items - second handler...`); next(); },
+    (req, res, next) => { res.send(`GET items - third and last handler.`) },
+],
+```
 
 # Author
 
