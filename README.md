@@ -185,6 +185,10 @@ These are the [methods allowed by express](https://expressjs.com/es/4x/api.html#
     "ALL    /accessToken": () => {}
  ```
 
+# Usage
+
+See examples in [examples](https://github.com/cape-/api-rendr/tree/master/examples).
+
 # Author
 
 Lautaro Capella <laucape@gmail.com>
