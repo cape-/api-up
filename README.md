@@ -98,7 +98,7 @@ Each **key** in this object, may be either:
  + [a path](https://expressjs.com/es/4x/api.html#path-examples) for a route 
  + or both. 
 
-The corresponding value for that key should be the handler for that request (see [Types of Handlers](#types-of-handlers)).
+The corresponding value for that key should be the handler for that request -in a Simple definition- (see [Types of Handlers](#types-of-handlers)) or an object -Complex definition-.
 
 ## Types of Handlers
 
@@ -144,6 +144,47 @@ An array of [handler functions](#handler-function).
     (req, res, next) => { console.log(`GET items - second handler...`); next(); },
     (req, res, next) => { res.send(`GET items - third and last handler.`) },
 ],
+```
+
+## Posible combinations
+
+Eigth base combinations.
+```
+"{METHOD} {/route}" + handler for Simple definitions
+
+    (a) "{METHOD} {/route}" + handler fn
+    (b) "{METHOD} {/route}" + fixed string
+    (c) "{METHOD} {/route}" + Array[] of handler fns
+
+
+"{/route}" for static resources
+
+    (d) "{/route}" + express.static(...),
+
+
+"{/route}" + object for Complex definition
+
+    (e) "{/route}": {
+            (f) "{METHOD}" + handler fn
+            (g) "{METHOD}" + fixed string
+            (h) "{METHOD}" + Array[] of handler fns
+    }
+```
+
+And the combinations of all above
+```
+    "{/route}": {
+            "{METHOD}" + handler fn
+            "{METHOD}" + fixed string
+            "{METHOD}" + Array[] of handler fns
+            "{/subroute}" + express.static(...)
+            "{/subroute}": {
+                ...
+            }
+            "{METHOD} {/subroute}" + handler fn
+            "{METHOD} {/subroute}" + fixed string
+            "{METHOD} {/subroute}" + Array[] of handler fns
+        }
 ```
 
 ## Allowed HTTP methods
