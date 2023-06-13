@@ -42,7 +42,7 @@ module.exports = {
 
                 } else if (Array.isArray(oEndpointValue)) {
                     // Array of handlers [fn()]
-                    debug(`ROUTE ${oEndpoint.route} MULTI-HANDLERS (${oEndpointValue.length})`);
+                    debug(`algo que quiero borrar luego ROUTE ${oEndpoint.route} MULTI-HANDLERS (${oEndpointValue.length})`);
                     oEndpointValue.forEach(oHandler => {
                         if (typeof oHandler === "function") {
                             // handler fn
